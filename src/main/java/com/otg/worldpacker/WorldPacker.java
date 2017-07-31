@@ -17,19 +17,19 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 // 
 // 1. Uncomment one of the following three @Mod lines and edit them for your worldpack:
 // - Change modid to the internal name of your mod. Use lower-case and normal alphabet only.
-// - Change name to the display (full) name of your mod.
+// - Change name to the display name of your mod.
 // 2. Using a command prompt (cmd) run the command "gradle build" in the /project/ directory, this should generate a worldpacker-1.0.jar file in the /project/build/libs/ directory.
 // 3. Using an archiving tool such as WinRar look inside the generated worldpacker-1.0.jar file and edit the following:
-// - Replace the /assets/worldpacker/YourWorldDir/ directory with your world directory (containing the WorldBiomes and WorldObject directories).
+// - Replace the /assets/worldpacker/MyWorldDir/ directory with your world directory (containing the WorldBiomes and WorldObject directories).
 // - Edit the mcmod.info file and fill in your mod's information.
-// - When you're done rename the worldpacker-1.0.jar file to reflect your mod name + MC version + mod version, for instance: "MyWorldPack-1.10.2-v1.0"
-// 4. That's it, copy your jar file a /mods/ directory and run the game!
+// - When you're done rename the worldpacker-1.0.jar file to your mod name + MC version + mod version, for instance: "MyWorldPack-1.10.2-v1.0".
+// 4. That's it, copy your jar file to a /mods/ directory and run the game!
 
-// Uncomment this line if your worldpack requires only OpenTerrainGenerator
+// Uncomment this line if your worldpack requires only OpenTerrainGenerator.
 @Mod(modid = "myworldpackid", name = "My worldpack name", version = "1.0", acceptableRemoteVersions = "*", useMetadata = true, dependencies = "required-after:openterraingenerator")
 // Uncomment and edit this line if your worldpack requires other mods or worldpacks.
 //@Mod(modid = "myworldpackid", name = "My worldpack name", version = "1.0", acceptableRemoteVersions = "*", useMetadata = true, dependencies = "required-after:openterraingenerator;required-after:otgflatlands;required-after:otgskylands;required-after:otgvoid")
-// Uncomment this line to run and test this mod from your development environment without requiring OTG. 
+// Uncomment this line to run and test this mod from your development environment without requiring OTG.
 //@Mod(modid = "myworldpackid", name = "My worldpack name", version = "1.0", acceptableRemoteVersions = "*", useMetadata = true)
 public class WorldPacker
 {   
