@@ -13,3 +13,5 @@ How to use:
 - Edit the mcmod.info file and fill in your mod's information.
 - When you're done rename the worldpacker-1.0.jar file to reflect your mod name + MC version + mod version, for instance: "MyWorldPack-1.10.2-v1.0"
 8. That's it, copy your jar file a /mods/ directory and run the game!
+
+* Check that your mod is set up correctly by making sure it show up in the mods menu, and the mod logo is displayed in the OTG world creation menu. Be sure to use a lowercase name without spaces for the "modid" field in mcmod.info, it should match your modname from WorldPacker.java.
