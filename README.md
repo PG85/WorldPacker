@@ -1,5 +1,5 @@
 # WorldPacker
-A project that can be used by OTG worldpack creators to package their worldpack as a seperate mod, just like Biome Bundle, Skylands, Flatlands and Void..
+A project that can be used by OTG preset creators to package their preset as a separate mod, just like Biome Bundle, Skylands, Flatlands and Void..
 
 How to use:
 1. Download the source code and run "gradle setupDecompWorkspace" and "gradle eclipse" in the directory. This may fail because of a time-out, if so try a couple of times. 
