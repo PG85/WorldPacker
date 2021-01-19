@@ -1,66 +1,121 @@
 package com.otg.presetpacker;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class PresetUnpackUtil {
     public static void extractPreset(JarFile jarFile, String presetFolderPath) throws IOException {
         Enumeration<JarEntry> entries = jarFile.entries();
-        String presetName = null;
-        ArrayList<JarEntry> srcWorldFilesInJar = new ArrayList<JarEntry>();
+        String presetName;
+        Map<String,ArrayList<JarEntry>> srcWorldFilesInJar = new HashMap<>();
+        Map<String, String> versionedPresetNames = new HashMap<>();
+        // Get all versions & preset names
+        while (entries.hasMoreElements())
+        {
+            JarEntry jarEntry = entries.nextElement();
 
+            if (jarEntry.getName().contains("WorldConfig.ini"))
+            {
+                presetName = jarEntry.getName().split("/")[1];
+                int[] parsedVersion = getVersions(new BufferedReader(new InputStreamReader(jarFile.getInputStream(jarEntry))));
+
+                String versionedPresetName;
+                if (presetName.matches("\\.+ v[0-9]+$"))
+                {
+                    versionedPresetName = presetName + " v" + parsedVersion[0];
+                } else {
+                    versionedPresetName = presetName;
+                }
+                // Check if there's already a preset with this major version
+                File oldDir = new File(presetFolderPath + versionedPresetName);
+                if (oldDir.exists())
+                {
+                    // Compare minor version. If we're not newer, we won't be writing to file
+                    int[] oldVersion = getVersions(new BufferedReader(new FileReader(presetFolderPath + versionedPresetName +File.separator+ "WorldConfig.ini")));
+                    if (parsedVersion[1] <= oldVersion[1]) continue;
+                }
+
+                // We're gonna be transferring this preset to file
+                srcWorldFilesInJar.put(presetName, new ArrayList<>());
+                versionedPresetNames.put(presetName, versionedPresetName);
+            }
+        }
+        // At this point, srcWorldFilesInJar contains an arraylist per presetname in source file
+        // versionedPresetNames contains versioned name for each presetname
+
+        entries = jarFile.entries();
+        // Get all files
         while(entries.hasMoreElements())
         {
             JarEntry jarEntry = entries.nextElement();
             // Jar files only ever use the / separator, regardless of system
-            if(jarEntry.getName().startsWith("assets/presetpacker/"))
+            if(jarEntry.getName().startsWith("presets/"))
             {
-                if(jarEntry.isDirectory() && !jarEntry.getName().equals("assets/presetpacker"))
+                // This is a preset file/folder
+                // Get the preset name to store it under
+                // "assets/presetpacker/Biome Bundle/Biomes/Jungle.bc" gets shortened to "Biome Bundle"
+                presetName = jarEntry.getName().split("/")[1];
+                if (srcWorldFilesInJar.containsKey(presetName))
                 {
-                    File file = new File(jarEntry.getName());
-                    File parentFile = file.getParentFile();
-                    String parentFileName = parentFile.getAbsolutePath();
-                    if(parentFileName.endsWith("presetpacker") && presetName == null) // TODO: Check for each world if it already exists, not only the first one.
-                    {
-                        presetName = jarEntry.getName().replace("assets/presetpacker/", "").replace("/", "");
-                    }
+                    srcWorldFilesInJar.get(presetName).add(jarEntry);
                 }
-                srcWorldFilesInJar.add(jarEntry);
             }
         }
 
         // Write the files to the output directory
-        if(presetName != null && srcWorldFilesInJar.size() > 0)
+        for (String key : srcWorldFilesInJar.keySet())
         {
-            File existingWorldConfig = new File(presetFolderPath + presetName + File.separator + "WorldConfig.ini");
-            if(!existingWorldConfig.exists())
+            // We have already checked whether we will write all the presets in srcWorldFilesInJar, so let's just do that
+            for (JarEntry entry : srcWorldFilesInJar.get(key))
             {
-                for(JarEntry jarEntry : srcWorldFilesInJar)
+                File f = new File(presetFolderPath + entry.getName().replace("presets/"+key, versionedPresetNames.get(key)));
+                if(entry.isDirectory())
                 {
-                    File f = new File(presetFolderPath + jarEntry.getName().replace("assets/presetpacker", ""));
-                    if(jarEntry.isDirectory())
+                    f.mkdirs();
+                } else {
+                    f.createNewFile();
+                    FileOutputStream fos = new FileOutputStream(f);
+                    byte[] byteArray = new byte[4096];
+                    int i;
+                    java.io.InputStream is = jarFile.getInputStream(entry);
+                    while ((i = is.read(byteArray)) > 0)
                     {
-                        f.mkdirs();
-                    } else {
-                        f.createNewFile();
-                        FileOutputStream fos = new FileOutputStream(f);
-                        byte[] byteArray = new byte[1024];
-                        int i;
-                        java.io.InputStream is = jarFile.getInputStream(jarEntry);
-                        while ((i = is.read(byteArray)) > 0)
-                        {
-                            fos.write(byteArray, 0, i);
-                        }
-                        is.close();
-                        fos.close();
+                        fos.write(byteArray, 0, i);
                     }
+                    is.close();
+                    fos.close();
                 }
             }
         }
+    }
+    private static int[] getVersions(BufferedReader reader) throws IOException {
+        String line;
+        while ((line = reader.readLine()) != null)
+        {
+            if (line.contains("Version:"))
+            {
+                break;
+            }
+        }
+        if (line == null)
+            return new int[] {0,0};
+        String v = line.split(":")[1];
+        v = v.trim();
+        if (line.contains("."))
+        {
+            return new int[] {
+                    Integer.parseInt(v.split("\\.")[0]),
+                    Integer.parseInt(v.split("\\.")[1])
+            };
+        }
+        return new int[] {
+                Integer.parseInt(v),
+                0
+        };
     }
 }
