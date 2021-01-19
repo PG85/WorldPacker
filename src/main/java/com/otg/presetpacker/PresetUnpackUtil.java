@@ -54,7 +54,7 @@ public class PresetUnpackUtil {
         {
             JarEntry jarEntry = entries.nextElement();
             // Jar files only ever use the / separator, regardless of system
-            if(jarEntry.getName().startsWith("presets/"))
+            if(jarEntry.getName().startsWith("presets/") && !jarEntry.getName().equalsIgnoreCase("presets/"))
             {
                 // This is a preset file/folder
                 // Get the preset name to store it under
