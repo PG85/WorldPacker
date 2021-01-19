@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.jar.JarFile;
 
 public class PresetPackerSpigot$B extends JavaPlugin {
-
     @Override
     public void onEnable()
     {
@@ -26,5 +25,4 @@ public class PresetPackerSpigot$B extends JavaPlugin {
             e.printStackTrace();
         }
     }
-
 }
