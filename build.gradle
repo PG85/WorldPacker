@@ -20,7 +20,7 @@ apply plugin: 'java'
 // -----------------------------------------------------------------
 //  **    Edit Here:    **
 version = '0.0'
-group = 'com.otg.worldpacker'
+group = 'com.otg.presetpacker'
 archivesBaseName = 'Preset_Name'
 description = "description"
 ext {
