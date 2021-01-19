@@ -9,7 +9,6 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
-<<<<<<< HEAD
 apply plugin: 'eclipse'
 apply plugin: 'java'
 
@@ -26,35 +25,6 @@ ext {
     author = "author"
     modId = "presetname"
     modDisplayName = "Preset Name"
-=======
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
-apply plugin: 'java'
-
-
-
-
-
-// -----------------------------------------------------------------
-//  **    Edit Here:    **
-version = '0.0'
-group = 'com.otg.presetpacker'
-archivesBaseName = 'Preset_Name'
-description = "description"
-ext {
-    credits = "credits"
-    author = "author"
-    modId = "lower-case-preset-name"
-
-// ----------------------------------------------------------------
-
-
-
-
-
-
-    displayName = archivesBaseName
->>>>>>> PresetPacker for 1.16
 }
 // ----------------------------------------------------------------
 
@@ -64,11 +34,6 @@ ext {
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
-<<<<<<< HEAD
-=======
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-
->>>>>>> PresetPacker for 1.16
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -94,7 +59,6 @@ repositories {
 }
 
 dependencies {
-<<<<<<< HEAD
     minecraft 'net.minecraftforge:forge:1.16.5-36.0.0'
     compileOnly "org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT"
 }
@@ -172,98 +136,9 @@ jar {
             "Implementation-Vendor" :"${author}",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
-=======
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.16.5-36.0.0'
-    compileOnly "org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT"
-
-    // You may put jars on which you depend on in ./libs or you may define them like so..
-    // compile "some.group:artifact:version:classifier"
-    // compile "some.group:artifact:version"
-
-    // Real examples
-    // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // These dependencies get remapped to your current MCP mappings
-    // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
-}
-
-task generateJava(type: Copy) {
-    from 'src/main/java'
-    into "$buildDir/generated/"
-    rename {
-        String fileName ->
-            fileName.replace("\$B.java", ".java")
-    }
-    expand ([
-            'presetpackerid': modId,
-            'B': "",
-            'displayName': displayName
-    ])
-    exclude "**/PresetUnpackUtil.java"
-}
-
-sourceSets.main.java {
-    // add the generated dir to the main source set
-    srcDir "$buildDir/generated/"
-    exclude '**/*$B.java'
-}
-compileJava.dependsOn generateJava
-
-processResources {
-    // This will ensure that this task is redone when the versions change.
-    inputs.property 'version', project.version
-
-    // Replace stuff in mods.toml, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META-INF/mods.toml'
-        // Replace version
-        expand(project.properties)
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'plugin.yml'
-        expand(project.properties)
->>>>>>> PresetPacker for 1.16
     }
 }
 
-<<<<<<< HEAD
-=======
-    // Copy everything else except the mods.toml
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'META-INF/mods.toml'
-        exclude 'plugin.yml'
-    }
-}
-
-// Example for how to get properties into the manifest for reading by the runtime..
-jar {
-    manifest {
-        attributes([
-            "Specification-Title": "${modId}",
-            "Specification-Vendor": "${author}",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"${author}",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
->>>>>>> PresetPacker for 1.16
 // Example configuration to allow publishing using the maven-publish task
 // This is the preferred method to reobfuscate your jar file
 jar.finalizedBy('reobfJar')
