@@ -29,17 +29,18 @@ public class PresetPackerForge$B
     private void setup(final FMLCommonSetupEvent event)
     {
         // Directly reference a log4j logger.
-        Logger LOGGER = LogManager.getLogger("${presetpackerid}");
+        Logger logger = LogManager.getLogger("${presetpackerid}");
         try
         {
             String presetFolderPath = new File(".").getCanonicalPath() + File.separator + "config" + File.separator + "OpenTerrainGenerator" + File.separator + "Presets" + File.separator;
 
-            LOGGER.log(Level.INFO, "Starting extraction");
+            logger.log(Level.INFO, "Starting extraction of ${modDisplayName}");
             // Fetch the world files from this mod's own jar
             JarFile jarFile = new JarFile(ModList.get().getModFileById("${presetpackerid}").getFile().getFilePath().toFile());
             PresetUnpackUtil.extractPreset(jarFile, presetFolderPath);
             jarFile.close();
-            InterModComms.sendTo("OTG", "loadNewPreset", () -> "${displayName}");
+            InterModComms.sendTo("OTG", "loadNewPreset", () -> "${modDisplayName}");
+            logger.log(Level.INFO, "Preset ${modDisplayName} extracted");
         }
         catch (IOException e)
         {
