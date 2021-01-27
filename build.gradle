@@ -21,7 +21,7 @@ apply plugin: 'java'
 //  **    Edit Here:    **
 version = '0.0'
 group = 'com.otg.presetpacker'
-archivesBaseName = 'Preset_Name'
+archivesBaseName = 'Preset-Name'
 description = "description"
 ext {
     credits = "credits"
