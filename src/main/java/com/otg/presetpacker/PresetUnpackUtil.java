@@ -9,11 +9,12 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class PresetUnpackUtil {
-    public static void extractPreset(JarFile jarFile, String presetFolderPath) throws IOException {
+    public static int extractPreset(JarFile jarFile, String presetFolderPath) throws IOException {
         Enumeration<JarEntry> entries = jarFile.entries();
         String presetName;
         Map<String,ArrayList<JarEntry>> srcWorldFilesInJar = new HashMap<>();
         Map<String, String> versionedPresetNames = new HashMap<>();
+        int filesWritten = 0;
         // Get all versions & preset names
         while (entries.hasMoreElements())
         {
@@ -25,11 +26,10 @@ public class PresetUnpackUtil {
                 int[] parsedVersion = getVersions(new BufferedReader(new InputStreamReader(jarFile.getInputStream(jarEntry))));
 
                 String versionedPresetName;
-                if (presetName.matches("\\.+ v[0-9]+$"))
-                {
-                    versionedPresetName = presetName + " v" + parsedVersion[0];
-                } else {
+                if (presetName.matches("\\.+[ _-]v[0-9]+$")) {
                     versionedPresetName = presetName;
+                } else {
+                    versionedPresetName = presetName + " v" + parsedVersion[0];
                 }
                 // Check if there's already a preset with this major version
                 File oldDir = new File(presetFolderPath + versionedPresetName);
@@ -90,8 +90,10 @@ public class PresetUnpackUtil {
                     is.close();
                     fos.close();
                 }
+                filesWritten++;
             }
         }
+        return filesWritten;
     }
     private static int[] getVersions(BufferedReader reader) throws IOException {
         String line;
