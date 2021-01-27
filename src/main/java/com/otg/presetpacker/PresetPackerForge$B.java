@@ -37,10 +37,10 @@ public class PresetPackerForge$B
             logger.log(Level.INFO, "Starting extraction of ${modDisplayName}");
             // Fetch the world files from this mod's own jar
             JarFile jarFile = new JarFile(ModList.get().getModFileById("${presetpackerid}").getFile().getFilePath().toFile());
-            PresetUnpackUtil.extractPreset(jarFile, presetFolderPath);
+            int filesWritten = PresetUnpackUtil.extractPreset(jarFile, presetFolderPath);
             jarFile.close();
             InterModComms.sendTo("OTG", "loadNewPreset", () -> "${modDisplayName}");
-            logger.log(Level.INFO, "Preset ${modDisplayName} extracted");
+            logger.log(Level.INFO, "Preset ${modDisplayName} extracted, wrote {} files", filesWritten);
         }
         catch (IOException e)
         {
