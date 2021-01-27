@@ -1,12 +1,8 @@
 name: '${archivesBaseName}'
 main: 'com.otg.presetpacker.PresetPackerSpigot'
-<<<<<<< HEAD
 version: '${version}'
 author: '${author}'
 loadbefore: [OpenTerrainGenerator]
 load: STARTUP
 api-version: 1.16
 description: '${description}'
-=======
-version: '${version}'
->>>>>>> PresetPacker for 1.16
