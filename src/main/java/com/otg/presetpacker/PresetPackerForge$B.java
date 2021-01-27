@@ -1,6 +1,9 @@
 package com.otg.presetpacker;
 
+import net.minecraft.block.Block;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -20,13 +23,16 @@ public class PresetPackerForge$B
 {
     public PresetPackerForge$B() {
         // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void setup(final FMLCommonSetupEvent event)
+    // We use the Register Blocks event to ensure we unpack files before OTG starts loading biomes
+    // The block registry is the first event to fire, which is why we specifically use this event
+    @SubscribeEvent
+    public void setup(RegistryEvent.Register<Block> event)
     {
         // Directly reference a log4j logger.
         Logger logger = LogManager.getLogger("${presetpackerid}");
