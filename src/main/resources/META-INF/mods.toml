@@ -14,6 +14,5 @@ ${description}
 [[dependencies.${modId}]]
     modId="otg"
     mandatory=true
-    versionRange="[34,)"
     ordering="BEFORE"
     side="BOTH"
