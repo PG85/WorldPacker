@@ -19,7 +19,7 @@ public class PresetPackerSpigot$B extends JavaPlugin {
             JarFile jarFile = new JarFile(new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()));
             int filesWritten = PresetUnpackUtil.extractPreset(jarFile, presetFolderPath);
             jarFile.close();
-            logger.log(Level.INFO, "Preset ${modDisplayName} extracted, wrote {} files", filesWritten);
+            logger.log(Level.INFO, "Preset ${modDisplayName} extracted, wrote "+filesWritten+" files");
         } catch (IOException e) {
             e.printStackTrace();
         }
