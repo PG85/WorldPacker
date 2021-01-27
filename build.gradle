@@ -27,16 +27,13 @@ ext {
     credits = "credits"
     author = "author"
     modId = "lower-case-preset-name"
-
+    modDisplayName = "Preset Name"
+}
 // ----------------------------------------------------------------
 
 
 
 
-
-
-    displayName = archivesBaseName
-}
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -93,7 +90,7 @@ task generateJava(dependsOn: copyPresetFiles, type: Copy) {
     expand ([
             'presetpackerid': modId,
             'B': "",
-            'displayName': displayName
+            'modDisplayName': modDisplayName
     ])
     exclude "**/PresetUnpackUtil.java"
 }
