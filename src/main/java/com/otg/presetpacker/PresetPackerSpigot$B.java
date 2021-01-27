@@ -11,20 +11,16 @@ import java.util.logging.Logger;
 
 public class PresetPackerSpigot$B extends JavaPlugin {
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         Logger logger = Bukkit.getLogger();
-        try
-        {
+        try {
             String presetFolderPath = new File(".").getCanonicalPath() + File.separator + "plugins" + File.separator + "OpenTerrainGenerator" + File.separator + "Presets" + File.separator;
             logger.log(Level.INFO, "Starting extraction of ${modDisplayName}");
             JarFile jarFile = new JarFile(new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()));
             int filesWritten = PresetUnpackUtil.extractPreset(jarFile, presetFolderPath);
             jarFile.close();
             logger.log(Level.INFO, "Preset ${modDisplayName} extracted, wrote {} files", filesWritten);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
