@@ -19,6 +19,7 @@ import java.util.jar.JarFile;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("${presetpackerid}")
+@Mod.EventBusSubscriber(modid = "${presetpackerid}", bus = Mod.EventBusSubscriber.Bus.MOD)
 public class PresetPackerForge$B
 {
     public PresetPackerForge$B() {
@@ -32,7 +33,7 @@ public class PresetPackerForge$B
     // We use the Register Blocks event to ensure we unpack files before OTG starts loading biomes
     // The block registry is the first event to fire, which is why we specifically use this event
     @SubscribeEvent
-    public void setup(RegistryEvent.Register<Block> event)
+    public static void setup(RegistryEvent.Register<Block> event)
     {
         // Directly reference a log4j logger.
         Logger logger = LogManager.getLogger("${presetpackerid}");
@@ -45,7 +46,10 @@ public class PresetPackerForge$B
             JarFile jarFile = new JarFile(ModList.get().getModFileById("${presetpackerid}").getFile().getFilePath().toFile());
             int filesWritten = PresetUnpackUtil.extractPreset(jarFile, presetFolderPath);
             jarFile.close();
-            InterModComms.sendTo("OTG", "loadNewPreset", () -> "${modDisplayName}");
+            for (String s : PresetUnpackUtil.versionedPresetNames.keySet())
+            {
+                InterModComms.sendTo("otg", "loadNewPreset", () -> s);
+            }
             logger.log(Level.INFO, "Preset ${modDisplayName} extracted, wrote {} files", filesWritten);
         }
         catch (IOException e)
