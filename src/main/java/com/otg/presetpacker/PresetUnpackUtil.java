@@ -9,11 +9,11 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class PresetUnpackUtil {
+    static Map<String, String> versionedPresetNames = new HashMap<>();
     public static int extractPreset(JarFile jarFile, String presetFolderPath) throws IOException {
         Enumeration<JarEntry> entries = jarFile.entries();
         String presetName;
         Map<String,ArrayList<JarEntry>> srcWorldFilesInJar = new HashMap<>();
-        Map<String, String> versionedPresetNames = new HashMap<>();
         int filesWritten = 0;
         // Get all versions & preset names
         while (entries.hasMoreElements())
