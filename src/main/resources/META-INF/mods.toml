@@ -17,4 +17,3 @@ ${description}
     versionRange="[0,)"
     ordering="BEFORE"
     side="BOTH"
-
