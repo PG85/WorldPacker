@@ -17,7 +17,7 @@ public class PresetPackerSpigot$B extends JavaPlugin {
             String presetFolderPath = new File(".").getCanonicalPath() + File.separator + "plugins" + File.separator + "OpenTerrainGenerator" + File.separator + "Presets" + File.separator;
             logger.log(Level.INFO, "Starting extraction of ${modDisplayName}");
             JarFile jarFile = new JarFile(new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()));
-            int filesWritten = PresetUnpackUtil.extractPreset(jarFile, presetFolderPath);
+            int filesWritten = PresetUnpackUtil.extractPreset(jarFile, presetFolderPath, true);
             jarFile.close();
             logger.log(Level.INFO, "Preset ${modDisplayName} extracted, wrote "+filesWritten+" files");
         } catch (IOException e) {
