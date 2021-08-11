@@ -1,17 +1,17 @@
 package com.otg.presetpacker;
 
+import javax.swing.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class PresetUnpackUtil {
     static Map<String, String> versionedPresetNames = new HashMap<>();
 
-    public static int extractPreset(JarFile jarFile, String presetFolderPath) throws IOException {
+    public static boolean requiresErrorScreen = false;
+
+    public static int extractPreset(JarFile jarFile, String presetFolderPath, boolean isDedicatedServer) throws IOException {
         Enumeration<JarEntry> entries = jarFile.entries();
         String presetName;
         Map<String, ArrayList<JarEntry>> srcWorldFilesInJar = new HashMap<>();
@@ -25,22 +25,52 @@ public class PresetUnpackUtil {
                 int[] parsedVersion = getVersions(new BufferedReader(new InputStreamReader(jarFile.getInputStream(jarEntry))));
 
                 String versionedPresetName;
-                if (presetName.matches("\\.+[ _-]v[0-9]+$")) {
+                // Code Authvin made that we don't use anymore
+                /*if (presetName.matches("\\.+[ _-]v[0-9]+$")) {
                     versionedPresetName = presetName;
                 } else {
                     versionedPresetName = presetName + " v" + parsedVersion[0];
-                }
+                }*/
+                versionedPresetName = presetName;
                 // Check if there's already a preset with this major version
                 File oldDir = new File(presetFolderPath + versionedPresetName);
+                boolean keepCurrentPreset = false;
                 if (oldDir.exists()) {
                     // Compare minor version. If we're not newer, we won't be writing to file
                     int[] oldVersion = getVersions(new BufferedReader(new FileReader(presetFolderPath + versionedPresetName + File.separator + "WorldConfig.ini")));
-                    if (parsedVersion[1] <= oldVersion[1]) continue;
+                    if (parsedVersion[1] <= oldVersion[1] && parsedVersion[0] == oldVersion[0]) continue;
+                    if (parsedVersion[0] > oldVersion[0]) {
+                        if (isDedicatedServer) {
+                            System.out.print("\u001B[33m");
+                            System.out.println("\u001B[33m############# UPDATE SKIPPED #############");
+                            System.out.println("\u001B[33mTried to update OTG preset " + versionedPresetName + " in " + oldDir.getAbsolutePath() + " but its version is too low.");
+                            System.out.println("\u001B[33mUpdate skipped.");
+                            System.out.println("\u001B[33mUpdating may lead to errors and seams for existing worlds using this preset.");
+                            System.out.println("\u001B[33mTo force update, delete " + oldDir.getAbsolutePath() + ". Always back up your world save files before updating.");
+                            System.out.println("\u001B[33m############# UPDATE NOTICE ############# ");
+                            System.out.print("\u001B[0m");
+                            keepCurrentPreset = true;
+                        } else {
+                            requiresErrorScreen = true;
+                            keepCurrentPreset = true;
+                            if (new File("./.REPLACE_ME").exists()) {
+                                keepCurrentPreset = false;
+                                requiresErrorScreen = false;
+                                new File("./.REPLACE_ME").delete();
+                            } else if (new File("./.DENY_PRESET_UPDATE").exists()) {
+                                requiresErrorScreen = false;
+                            }
+                        }
+                    }
                 }
 
-                // We're gonna be transferring this preset to file
-                srcWorldFilesInJar.put(presetName, new ArrayList<>());
-                versionedPresetNames.put(presetName, versionedPresetName);
+                if (!keepCurrentPreset) {
+                    File backupDir = new File(oldDir.getParent() + "/" + presetName + "-BACKUP");
+                    oldDir.renameTo(backupDir);
+                    // We're gonna be transferring this preset to file
+                    srcWorldFilesInJar.put(presetName, new ArrayList<>());
+                    versionedPresetNames.put(presetName, versionedPresetName);
+                }
             }
         }
         // At this point, srcWorldFilesInJar contains an arraylist per presetname in source file
