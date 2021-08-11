@@ -19,9 +19,9 @@ apply plugin: 'java'
 
 // -----------------------------------------------------------------
 //  **    Edit Here:    **
-version = '0.0'
+version = '2.0'
 group = 'com.otg.presetpacker'
-archivesBaseName = 'Preset-Name'
+archivesBaseName = 'Test-Preset'
 description = "description"
 ext {
     credits = "credits"
@@ -93,6 +93,7 @@ task generateJava(dependsOn: copyPresetFiles, type: Copy) {
             'modDisplayName': modDisplayName
     ])
     exclude "**/PresetUnpackUtil.java"
+    exclude "**/ClientOutdatedPresetScreen.java"
 }
 
 sourceSets.main.java {
