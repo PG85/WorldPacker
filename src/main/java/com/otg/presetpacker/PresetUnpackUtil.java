@@ -1,6 +1,5 @@
 package com.otg.presetpacker;
 
-import javax.swing.*;
 import java.io.*;
 import java.util.*;
 import java.util.jar.JarEntry;
@@ -10,6 +9,10 @@ public class PresetUnpackUtil {
     static Map<String, String> versionedPresetNames = new HashMap<>();
 
     public static boolean requiresErrorScreen = false;
+
+    public static String thePreset = "";
+    public static int majorVersion;
+    public static int majorVersionBefore;
 
     public static int extractPreset(JarFile jarFile, String presetFolderPath, boolean isDedicatedServer) throws IOException {
         Enumeration<JarEntry> entries = jarFile.entries();
@@ -32,6 +35,7 @@ public class PresetUnpackUtil {
                     versionedPresetName = presetName + " v" + parsedVersion[0];
                 }*/
                 versionedPresetName = presetName;
+                thePreset = versionedPresetName;
                 // Check if there's already a preset with this major version
                 File oldDir = new File(presetFolderPath + versionedPresetName);
                 boolean keepCurrentPreset = false;
@@ -62,6 +66,8 @@ public class PresetUnpackUtil {
                             }
                         }
                     }
+                    majorVersion = parsedVersion[0];
+                    majorVersionBefore = oldVersion[0];
                 }
 
                 if (!keepCurrentPreset) {
