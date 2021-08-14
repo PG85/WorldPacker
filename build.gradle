@@ -16,9 +16,9 @@ apply plugin: 'java'
 
 // -----------------------------------------------------------------
 //  **    Edit Here:    **
-version = '2.0'
+version = '0.0'
 group = 'com.otg.presetpacker'
-archivesBaseName = 'Test-Preset'
+archivesBaseName = 'Preset-Name'
 description = "description"
 ext {
     credits = "credits"
