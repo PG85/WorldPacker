@@ -45,7 +45,7 @@ public class PresetUnpackUtil$B {
                         }
                         // We've been here before, and placed a REPLACE_ME file
                         if (oldInstallDir.toPath().resolve(".REPLACE_ME").toFile().exists()) {
-                            new File("./.REPLACE_ME").delete();
+                            oldInstallDir.toPath().resolve(".REPLACE_ME").toFile().delete();
                         }
                         // We've been here before, and we're not updating the preset
                         else if (oldInstallDir.toPath().resolve(".DENY_PRESET_UPDATE").toFile().exists()) {
