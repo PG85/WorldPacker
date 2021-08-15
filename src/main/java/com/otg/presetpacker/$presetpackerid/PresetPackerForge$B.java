@@ -1,4 +1,4 @@
-package com.otg.presetpacker;
+package com.otg.presetpacker.$presetpackerid;
 
 import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -20,8 +20,7 @@ import java.util.jar.JarFile;
 @Mod("${presetpackerid}")
 @Mod.EventBusSubscriber
 public class PresetPackerForge$B {
-
-    public static GuiOpenEvent guiOpenEvent;
+    private static PresetUnpackUtil$B util;
 
     public PresetPackerForge$B() {
         // Directly reference a log4j logger.
@@ -33,10 +32,11 @@ public class PresetPackerForge$B {
             // Fetch the world files from this mod's own jar
             JarFile jarFile = new JarFile(ModList.get().getModFileById("${presetpackerid}").getFile().getFilePath().toFile());
             boolean isServer = ForgeConfig.CLIENT == null;
-            int filesWritten = PresetUnpackUtil.extractPreset(jarFile, presetFolderPath, isServer);
+            util = new PresetUnpackUtil$B();
+            int filesWritten = util.extractPreset(jarFile, presetFolderPath, isServer);
             jarFile.close();
             if (filesWritten > 0)
-                logger.log(Level.INFO, "Preset ${modDisplayName} extracted, wrote {} files", filesWritten);
+                logger.log(Level.INFO, "Preset ${modDisplayName} extracted, wrote "+filesWritten+" files");
             else
                 logger.log(Level.INFO, "Preset ${modDisplayName} was already up to date, skipped");
         } catch (IOException e) {
@@ -46,10 +46,14 @@ public class PresetPackerForge$B {
 
     @SubscribeEvent
     public static void onGuiOpen(GuiOpenEvent evt) {
-        if (evt.getGui() instanceof MainMenuScreen && PresetUnpackUtil.requiresErrorScreen) {
-            guiOpenEvent = evt;
-            Screen mainMenuScreen = evt.getGui();
-            evt.setGui(new ClientOutdatedPresetScreen(new StringTextComponent("Preset Update"), mainMenuScreen));
+        if (evt.getGui() instanceof MainMenuScreen && !util.PRESET_NAME.isEmpty()) {
+            evt.setGui(new ClientOutdatedPresetScreen$B(
+                    new StringTextComponent("Preset Update"),
+                    util.PRESET_NAME.remove(0),
+                    util.OLD_MAJOR_VERSION.remove(0),
+                    util.NEW_MAJOR_VERSION.remove(0),
+                    util.PRESET_PATH.remove(0))
+            );
         }
     }
 }
