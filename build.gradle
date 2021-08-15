@@ -23,7 +23,7 @@ description = "description"
 ext {
     credits = "credits"
     author = "author"
-    modId = "lower-case-preset-name"
+    modId = "presetname"
     modDisplayName = "Preset Name"
 }
 // ----------------------------------------------------------------
@@ -70,16 +70,16 @@ task makePreset (dependsOn: [build], type: Copy) {
 }
 
 task copyPresetFiles(dependsOn: clean,type: Copy) {
-    def tree = fileTree('presets') {
+    def tree = fileTree('Presets') {
         include '**/*'
     }
     from tree
-    into "$buildDir/resources/main/presets"
+    into "$buildDir/resources/main/Presets"
 }
 
 task generateJava(dependsOn: copyPresetFiles, type: Copy) {
-    from 'src/main/java'
-    into "$buildDir/generated/"
+    from 'src/main/java/com/otg/presetpacker/$presetpackerid'
+    into "$buildDir/generated/com/otg/presetpacker/"+modId
     rename {
         String fileName ->
             fileName.replace("\$B.java", ".java")
@@ -89,8 +89,8 @@ task generateJava(dependsOn: copyPresetFiles, type: Copy) {
             'B': "",
             'modDisplayName': modDisplayName
     ])
-    exclude "**/PresetUnpackUtil.java"
-    exclude "**/ClientOutdatedPresetScreen.java"
+    //exclude "**/PresetUnpackUtil.java"
+    //exclude "**/ClientOutdatedPresetScreen.java"
 }
 
 sourceSets.main.java {
