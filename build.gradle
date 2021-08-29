@@ -68,7 +68,6 @@ task makePreset (dependsOn: [build], type: Copy) {
     into "$rootDir/output"
     include '*.jar'
 }
-compileJava.dependsOn generateJava
 
 task copyPresetFiles(dependsOn: clean,type: Copy) {
     def tree = fileTree('Presets') {
@@ -93,6 +92,8 @@ task generateJava(dependsOn: copyPresetFiles, type: Copy) {
     //exclude "**/PresetUnpackUtil.java"
     //exclude "**/ClientOutdatedPresetScreen.java"
 }
+
+compileJava.dependsOn generateJava
 
 sourceSets.main.java {
     // add the generated dir to the main source set
