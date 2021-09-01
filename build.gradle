@@ -85,9 +85,10 @@ task generateJava(dependsOn: copyPresetFiles, type: Copy) {
             fileName.replace("\$B.java", ".java")
     }
     expand ([
-            'presetpackerid': modId,
-            'B': "",
-            'modDisplayName': modDisplayName
+			'presetpackerid': modId,
+			'B': "",
+			'modDisplayName': modDisplayName,
+			'modId': modId
     ])
     //exclude "**/PresetUnpackUtil.java"
     //exclude "**/ClientOutdatedPresetScreen.java"

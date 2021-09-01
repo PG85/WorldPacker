@@ -1,5 +1,5 @@
 name: '${archivesBaseName}'
-main: 'com.otg.presetpacker.PresetPackerSpigot'
+main: 'com.otg.presetpacker.${modId}.PresetPackerSpigot'
 version: '${version}'
 author: '${author}'
 loadbefore: [OpenTerrainGenerator]
