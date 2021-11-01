@@ -1,5 +1,7 @@
 package com.otg.presetpacker.$presetpackerid;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraft.client.gui.screen.MainMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.StringTextComponent;
@@ -45,6 +47,7 @@ public class PresetPackerForge$B {
     }
 
     @SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
     public static void onGuiOpen(GuiOpenEvent evt) {
         if (evt.getGui() instanceof MainMenuScreen && !util.PRESET_NAME.isEmpty()) {
             evt.setGui(new ClientOutdatedPresetScreen$B(
