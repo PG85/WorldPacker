@@ -18,13 +18,15 @@ public class ClientOutdatedPresetScreen$B extends Screen {
     private final int newVersion;
     private final Path presetPath;
     private Component errorHeader;
+    private Screen mainMenu;
 
-    protected ClientOutdatedPresetScreen$B(Component titleIn, String presetName, int oldVersion, int newVersion, Path presetPath) {
+    protected ClientOutdatedPresetScreen$B(Component titleIn, String presetName, int oldVersion, int newVersion, Path presetPath, Screen mainMenu) {
         super(titleIn);
         this.presetName = presetName;
         this.oldVersion = oldVersion;
         this.newVersion = newVersion;
         this.presetPath = presetPath;
+        this.mainMenu = mainMenu;
     }
 
     @Override
@@ -62,7 +64,7 @@ public class ClientOutdatedPresetScreen$B extends Screen {
                         this.width / 3 - 15,
                         20,
                         new TextComponent("Ignore for now"),
-                        b -> this.clearWidgets()));
+                        b -> Minecraft.getInstance().forceSetScreen(mainMenu)));
 
         this.addRenderableWidget(
                 new Button(
@@ -77,7 +79,7 @@ public class ClientOutdatedPresetScreen$B extends Screen {
                                 if (!markerFile.exists()) {
                                     markerFile.createNewFile();
                                 }
-                                this.clearWidgets();
+                                Minecraft.getInstance().forceSetScreen(mainMenu);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

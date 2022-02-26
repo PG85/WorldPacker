@@ -55,7 +55,7 @@ public class PresetPackerForge$B {
                     util.PRESET_NAME.remove(0),
                     util.OLD_MAJOR_VERSION.remove(0),
                     util.NEW_MAJOR_VERSION.remove(0),
-                    util.PRESET_PATH.remove(0))
+                    util.PRESET_PATH.remove(0), evt.getScreen())
             );
         }
     }
