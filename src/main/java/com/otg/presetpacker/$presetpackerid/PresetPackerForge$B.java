@@ -1,11 +1,11 @@
 package com.otg.presetpacker.$presetpackerid;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.TitleScreen;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraft.client.gui.screen.MainMenuScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -48,14 +48,14 @@ public class PresetPackerForge$B {
 
     @SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
-    public static void onGuiOpen(ScreenEvent evt) {
-        if (evt.getScreen() instanceof TitleScreen && !util.PRESET_NAME.isEmpty()) {
-            Minecraft.getInstance().forceSetScreen(new ClientOutdatedPresetScreen$B(
-                    new TextComponent("Preset Update"),
+    public static void onGuiOpen(GuiOpenEvent evt) {
+        if (evt.getGui() instanceof MainMenuScreen && !util.PRESET_NAME.isEmpty()) {
+            evt.setGui(new ClientOutdatedPresetScreen$B(
+                    new StringTextComponent("Preset Update"),
                     util.PRESET_NAME.remove(0),
                     util.OLD_MAJOR_VERSION.remove(0),
                     util.NEW_MAJOR_VERSION.remove(0),
-                    util.PRESET_PATH.remove(0), evt.getScreen())
+                    util.PRESET_PATH.remove(0))
             );
         }
     }
